@@ -12,7 +12,7 @@ export class GraphComponent implements OnInit {
   @ViewChild('visGraph') private visGraph;
   
   constructor(private visService: VisService) { }
-
+//
   ngOnInit() {
     console.log('init graph component');
     VisService.networkOptions = {
