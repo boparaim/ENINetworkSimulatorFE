@@ -1,0 +1,15 @@
+<h1>Add an edge</h1>
+
+<label for="nodeIpA" >IP Address of node A: </label>
+<input type="text" name="nodeIpA" placeholder="10.10.0.1" required [(ngModel)]="edge.nodeIpA" />
+<br><br>
+<label for="ifIndexA" >IF index on node A: </label>
+<input type="text" name="ifIndexA" placeholder="1001" required [(ngModel)]="edge.ifIndexA" />
+<br><br>
+<label for="nodeIpB" >IP Address of node B: </label>
+<input type="text" name="nodeIpB" placeholder="10.10.0.2" required [(ngModel)]="edge.nodeIpB" />
+<br><br>
+<label for="ifIndexB" >IF index on node B: </label>
+<input type="text" name="ifIndexB" placeholder="1002" required [(ngModel)]="edge.ifIndexB" />
+<br><br>
+<button (click)="add()">Add</button>

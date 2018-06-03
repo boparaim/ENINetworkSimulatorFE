@@ -1,0 +1,46 @@
+<h1>Settings</h1>
+
+<h3>Stats</h3>
+<label for="totalNodes" >Total Nodes: </label>
+<input type="text" name="totalNodes" placeholder="0" readonly [(ngModel)]="configuration.totalNodes" />
+<br><br>
+<label for="uniqueNodes" >Unique Nodes: </label>
+<input type="text" name="uniqueNodes" placeholder="0" readonly [(ngModel)]="configuration.uniqueNodes" />
+<br><br>
+<label for="totalEdges" >Total Edges: </label>
+<input type="text" name="totalEdges" placeholder="0" readonly [(ngModel)]="configuration.totalEdges" />
+<br><br>
+<label for="uniqueEdges" >Unique Edges: </label>
+<input type="text" name="uniqueEdges" placeholder="0" readonly [(ngModel)]="configuration.uniqueEdges" />
+<br><br>
+
+<h3>Import</h3>
+<label for="importText" >Import from JSON Text: </label>
+<textarea id="importText" name="importText" placeholder='{
+	"nodes": [
+		{
+			"name":"",
+			"ip":""
+		}
+	],
+	"edges":[
+		{
+			"nodeIpA":"",
+			"nodeIpB":"",
+			"ifIndexA":"",
+			"ifIndexB":""
+		}
+	]
+}' [(ngModel)]="configuration.importText" ></textarea>
+<button (click)="importFromJsonText()">Import</button>
+<br>
+<label for="importTextResult" >{{ configuration.importTextResult }}</label>
+<br><br>
+<label for="importText" >Import from JSON Text: </label>
+<br><br>
+<h3>Export</h3>
+<h3>Delete</h3>
+<label for="deleteTopologyData" >Delete topology data: </label>
+<button (click)="deleteTopologyData()">Delete</button>
+<br>
+<label for="deleteTopologyResult" >{{ configuration.deleteTopologyResult }}</label>

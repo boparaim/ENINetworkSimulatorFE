@@ -1,0 +1,71 @@
+import { Component } from '@angular/core';
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+// external libraries
+import * as SockJS from '../../node_modules/sockjs-client/dist/sockjs.js';
+//import * as Stomp from '../../node_modules/stompjs/lib/stomp.js';
+//require('../../node_modules/sockjs-client/dist/sockjs.js')
+//import * as SockJS from 'sockjs-client';
+//declare var SockJS: any;
+//declare var Stomp: any;
+//var StompJS = require('../../node_modules/stompjs/lib/stomp.js');
+//var Stomp = StompJS.Stomp;
+
+import { Stomp } from '../../node_modules/stompjs/lib/stomp.js';
+
+
+  var connected = false;
+  var stompClient = null;
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'Test component';
+  
+  
+  openWS(): void {
+    if (!connected) {
+      console.log('opening ws');
+      //console.log(Stomp);
+      var socket = new SockJS('http://localhost:8095/ENINetworkSimulator/websocket');
+      //var client = Stomp.over('ws://localhost:8095/ENINetworkSimulator/eni-network-simulator-websocket');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function(frame) {
+        console.log('ws connected', frame);
+        connected = true;
+        stompClient.subscribe('/topic/test-websocket-reply', function(reply) {
+          console.log('received from server ', reply);
+        });
+      });
+    }
+  }
+  
+  closeWS(): void {
+    if (connected) {
+      console.log('disconnecting');
+      connected = false;
+      stompClient.disconnect();
+    }
+  }
+  
+  sendWebSocketRequest(): void {
+     //console.log('sending ws request');
+      //eni-network-simulator-websocket
+    //eni-network-simulator/test-websocket
+      /*var ws = new WebSocket("ws://localhost:8095/ENINetworkSimulator/eni-network-simulator-websocket");
+      ws.onopen = function(e) {
+        ws.send('eni-network-simulator/test-websocket?data=some text');
+        console.log('send request');
+      };
+      ws.onmessage = function(e) {
+        console.log('received '+e);
+      };*/
+    
+    stompClient.send('/websocket-route/test-websocket', {}, JSON.stringify({'data':'some text'}));
+   }
+  
+}
