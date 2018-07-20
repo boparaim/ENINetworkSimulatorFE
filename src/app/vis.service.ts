@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { ApplicationProperties } from './application-properties';
 import { Node } from './node';
 import { Edge } from './edge';
 import { JsonResponse } from './jsonresponse';
@@ -20,14 +21,15 @@ const httpOptions = {
 export class VisService {
 
   public static network: vis.Network;
-  public static networkOptions: any = {};
+  //public static networkOptions: any = {};
   private nodesDataset: vis.DataSet;
   private edgeDataset: vis.DataSet;
   
-  private urlGetNodes = 'http://localhost:8095/ENINetworkSimulator/fe/nodes';
-  private urlGetEdges = 'http://localhost:8095/ENINetworkSimulator/fe/edges';
-  private urlPutNode = 'http://localhost:8095/ENINetworkSimulator/fe/node';
-  private urlPutEdge = 'http://localhost:8095/ENINetworkSimulator/fe/edge';
+  // 'http://localhost:8095/ENINetworkSimulator/fe/nodes';
+  private urlGetNodes = ApplicationProperties.serverUrl + '/' + ApplicationProperties.serverApplicationContext + '/fe/nodes';
+  private urlGetEdges = ApplicationProperties.serverUrl + '/' + ApplicationProperties.serverApplicationContext + '/fe/edges';
+  private urlPutNode = ApplicationProperties.serverUrl + '/' + ApplicationProperties.serverApplicationContext + '/fe/node';
+  private urlPutEdge = ApplicationProperties.serverUrl + '/' + ApplicationProperties.serverApplicationContext + '/fe/edge';
   
   constructor(private http: HttpClient) {
     /*console.log(vis);*/
@@ -42,7 +44,7 @@ export class VisService {
       (data: Node[]) => {
         //console.log(data)
         //this.nodesDataset = VisService.network.body.data.nodes;
-        data.forEach((node) => {
+        /*data.forEach((node) => {
           //console.log(node);
           if (this.nodesDataset.get(node.id) != null) {
             //console.log('id already present');
@@ -65,12 +67,13 @@ export class VisService {
           /*this.nodesDataset.update({
             id: node.id
           });*/
-        });
+        //});
+          this.addNodesToNetwork(data);
         
         this.getEdges().subscribe(
           (data: Edge[]) => {
             //console.log(data)
-            data.forEach((edge) => {
+            /*data.forEach((edge) => {
               //console.log(node);
               if (this.edgeDataset.get(edge.id) != null) {
                 //console.log('id already present');
@@ -78,7 +81,10 @@ export class VisService {
               }
               
               this.addEdgeToNetwork(edge);
-            });
+            });*/
+              this.addEdgesToNetwork(data);
+              
+              VisService.network.fit();
           }
         );
       }
@@ -97,7 +103,7 @@ export class VisService {
     VisService.network = new vis.Network(
                             container, 
                             {nodes: this.nodesDataset, edges: this.edgeDataset}, 
-                            VisService.networkOptions
+                            ApplicationProperties.visOptions
                           );
   }
 
@@ -140,10 +146,23 @@ export class VisService {
       model: node.model,
       'type': node.type,
       metadata: node.metadata,
+      x: node.x,
+      y: node.y,
       label: node.name,
       title: this.createNodeTitle(node)
     });
   }
+  
+    addNodesToNetwork(nodes: Node[]) {
+        let nodesArray = new Array();
+        nodes.forEach((node) => {
+            node.label = node.name;
+            node.title = this.createNodeTitle(node);
+            nodesArray.push(node);
+        });
+
+        this.nodesDataset.add(nodesArray);
+    }
   
   createNodeTitle(node: Node): string {
     let titleString = '';
@@ -171,6 +190,18 @@ export class VisService {
       title: this.createEdgeTitle(edge)
     });
   }
+  
+    addEdgesToNetwork(edges: Edge[]) {
+        let edgesArray = new Array();
+        edges.forEach((edge) => {
+            edge.from = edge.nodeIdA;
+            edge.to = edge.nodeIdB;
+            edge.title = this.createEdgeTitle(edge);
+            edgesArray.push(edge);
+        });
+
+        this.edgeDataset.add(edgesArray);
+    }
   
   createEdgeTitle(edge: Edge): string {
     let titleString = '';

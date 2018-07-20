@@ -38,7 +38,17 @@
 <br><br>
 <label for="importText" >Import from JSON Text: </label>
 <br><br>
+<label for="importPcap" >Import from *.pcap (tcpdump/wireshark) file: </label>
+<input type="file" id="importPcap" name="importPcap" (change)="fileChangeEvent($event)"
+	placeholder="Upload a pcap file" [(ngModel)]="configuration.pcapFile" />
+<button (click)="uploadPcap()">Upload</button>
+<br>
+<label for="importPcapResult" >{{ configuration.importPcapResult }}</label>
 <h3>Export</h3>
+<label for="exportTopologyData" >Export topology data: </label>
+<button (click)="exportTopologyData()">Export</button>
+<br>
+<label for="exportTopologyResult" >{{ configuration.exportTopologyResult }}</label>
 <h3>Delete</h3>
 <label for="deleteTopologyData" >Delete topology data: </label>
 <button (click)="deleteTopologyData()">Delete</button>

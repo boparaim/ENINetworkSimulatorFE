@@ -5,6 +5,8 @@ import { VisService } from './vis.service';
 import * as SockJS from '../../node_modules/sockjs-client/dist/sockjs.js';
 import { Stomp } from '../../node_modules/stompjs/lib/stomp.js';
 
+import { ApplicationProperties } from './application-properties';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +14,7 @@ export class WebsocketService {
 
   private stompClient: any = null;
   private connected = false;
-  private serverUrl = 'http://localhost:8095/ENINetworkSimulator/websocket';
+  private serverUrl = ApplicationProperties.serverUrl + '/' + ApplicationProperties.serverApplicationContext + '/websocket'; 
   private topicUrl = '/topic/test-websocket-reply';
   private messagePathPrefix = '/websocket-route';
 

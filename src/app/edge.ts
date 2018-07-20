@@ -6,4 +6,8 @@ export class Edge {
   ifIndexB: string;
   nodeIpA: string;
   nodeIpB: string;
+    // local properties
+    to: number;
+    from: number;
+    title: string;
 }

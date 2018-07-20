@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+
 import * as $ from 'jquery';
 import { VisService } from '../vis.service';
 
@@ -15,7 +16,7 @@ export class GraphComponent implements OnInit {
 //
   ngOnInit() {
     console.log('init graph component');
-    VisService.networkOptions = {
+    /*VisService.networkOptions = {
       nodes: {},
       edges: {},
       interaction: {
@@ -24,7 +25,7 @@ export class GraphComponent implements OnInit {
       layout: {},
       manipulation: {},
       physics: {}
-    };
+    };*/
   }
   
   ngAfterViewInit() {
